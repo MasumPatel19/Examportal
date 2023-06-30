@@ -1,22 +1,27 @@
 package com.exam.entities;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -142,6 +147,43 @@ public class User {
 		return "User [userId=" + userId + ", userName=" + userName + ", password=" + password + ", firstName="
 				+ firstName + ", lastName=" + lastName + ", email=" + email + ", phone=" + phone + ", profile="
 				+ profile + ", enabled=" + enabled + ", userRoles=" + userRoles + "]";
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+
+		Set<Authority> set = new HashSet<>();
+
+		userRoles.forEach(userRole -> {
+			set.add(new Authority(userRole.getRole().getRoleName()));
+		});
+
+		return set;
+	}
+
+	@Override
+	public String getUsername() {
+		return userName;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enabled;
 	}
 
 }

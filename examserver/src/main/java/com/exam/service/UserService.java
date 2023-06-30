@@ -28,7 +28,6 @@ public class UserService {
 			System.out.println("User is already exist.");
 			throw new Exception("User already pressent");
 		} else {
-			System.out.println("---- in else----------------");
 			// create user
 			for (UserRole ur : userRoles) {
 				System.out.println("in save role" + ur.getRole());

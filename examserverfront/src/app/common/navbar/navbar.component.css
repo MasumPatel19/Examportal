@@ -1,0 +1,10 @@
+.example-spacer {
+    flex: 1 1 auto;
+  }
+  
+  .mat-toolbar.mat-dark {
+    background: #455a64;
+    /* background: #11675e; */
+    /* background: #33877e; */
+    color: #fff;
+}
